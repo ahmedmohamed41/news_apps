@@ -3,7 +3,7 @@ abstract class AssetManager {
   static const String newsLogo = '$base/news_logo.png';
   static const String newsBranding = '$base/news_branding.png';
   static const String business = '$base/business.png';
-  static const String sports = '$base/sports.jpg';
+  static const String sports = '$base/sports1.jpg';
   static const String health = '$base/health.png';
   static const String general = '$base/general.png';
   static const String science = '$base/science.png';

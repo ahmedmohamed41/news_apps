@@ -1,11 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:news_app/api/models/article_response/article.dart';
 import 'package:news_app/core/resources/colors_manager.dart';
-import 'package:news_app/models/article.dart';
 
 class ArticleItem extends StatelessWidget {
   const ArticleItem({super.key, required this.article});
-  final Article article;
+  final Articles article;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,13 +22,17 @@ class ArticleItem extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadiusGeometry.circular(16.r),
-            child: Image.network(article.urlToImage),
+            child: CachedNetworkImage(
+              imageUrl: article.urlToImage ?? '',
+              placeholder: (context, url) => const CircularProgressIndicator(),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+            ),
           ),
           SizedBox(
             height: 10.h,
           ),
           Text(
-            article.title,
+            article.title ?? '',
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           SizedBox(
@@ -41,7 +46,7 @@ class ArticleItem extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                'By:${article.publishedAt}',
+                article.publishedAt!.substring(article.publishedAt!.length-6),
                 style: Theme.of(context).textTheme.titleSmall,
               ),
             ],

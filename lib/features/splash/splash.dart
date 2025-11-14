@@ -2,7 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:news_app/core/resources/assets_manager.dart';
+import 'package:news_app/core/resources/colors_manager.dart';
 import 'package:news_app/core/resources/routes_manager.dart';
+import 'package:news_app/provider/config_provider.dart';
+import 'package:provider/provider.dart';
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -47,6 +50,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ConfigProvider>(context);
     return Scaffold(
       body: Padding(
         padding: REdgeInsets.only(bottom: 12),
@@ -60,6 +64,9 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
                 scale: _scaleAnimation,
                 child: Image.asset(
                   AssetManager.newsLogo,
+                  color: provider.isDark
+                      ? ColorsManager.white
+                      : ColorsManager.black,
                   width: 180.w,
                   height: 180.h,
                 ),
@@ -70,6 +77,9 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
               opacity: _fadeAnimation,
               child: Image.asset(
                 AssetManager.newsBranding,
+                color: provider.isDark
+                    ? ColorsManager.white
+                    : ColorsManager.black,
                 width: 214.w,
                 height: 86.h,
               ),
