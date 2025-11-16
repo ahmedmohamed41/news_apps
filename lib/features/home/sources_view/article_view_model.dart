@@ -4,11 +4,13 @@ import 'package:news_app/api/models/article_response/article.dart';
 import 'package:news_app/api/models/source_responses/source.dart';
 import 'package:news_app/api/result.dart';
 
-class ArticleProvider extends ChangeNotifier {
+class ArticleViewModel extends ChangeNotifier {
   List<Articles> articles = [];
   bool isLoading = false;
   String? errorMessage;
-  Future<void> fetchArticles(Source source) async {
+  Future<void> fetchArticles(
+    Source source,
+  ) async {
     isLoading = true;
     notifyListeners();
     Result result = await ApiService.getArticle(source);

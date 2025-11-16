@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ConfigProvider extends ChangeNotifier {
   bool isDark = true;
-  String isEn = 'en';
+  String isEnglish = 'en';
 
   void toggleTheme(value) {
     isDark = value;
@@ -10,11 +10,11 @@ class ConfigProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void chanegLanguage(lan) {
-    isEn = lan;
+  void chanegLanguage(language) {
+    isEnglish = language;
     notifyListeners();
   }
 
   ThemeMode get currentTheme => isDark ? ThemeMode.dark : ThemeMode.light;
-  String get currentlanguage => isEn == 'en' ? 'en' : 'ar';
+  String get currentlanguage => isEnglish == 'en' ? 'en' : 'ar';
 }

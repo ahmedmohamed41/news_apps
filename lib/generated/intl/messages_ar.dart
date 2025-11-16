@@ -39,7 +39,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "home": MessageLookupByLibrary.simpleMessage("الرئيسية"),
     "languages": MessageLookupByLibrary.simpleMessage("اللغات"),
     "light": MessageLookupByLibrary.simpleMessage("فاتح"),
+    "no_search": MessageLookupByLibrary.simpleMessage(
+      "لا يوجد بحث اخبار حتي الان!",
+    ),
     "science": MessageLookupByLibrary.simpleMessage("علوم"),
+    "search": MessageLookupByLibrary.simpleMessage("بحث"),
     "sports": MessageLookupByLibrary.simpleMessage("رياضة"),
     "technology": MessageLookupByLibrary.simpleMessage("تكنولوجيا"),
     "theme": MessageLookupByLibrary.simpleMessage("السمة"),

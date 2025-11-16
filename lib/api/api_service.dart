@@ -34,7 +34,9 @@ class ApiService {
     }
   }
 
-  static Future<Result> getArticle(Source source) async {
+  static Future<Result> getArticle(
+    Source source,
+  ) async {
     try {
       Uri url = Uri.https(baseUrl, articleEndPoint, {
         "apiKey": apiKey,
@@ -50,7 +52,27 @@ class ApiService {
         return Success(articleResponse.articles);
       }
     } on SocketException catch (e) {
-     return Error(e.message);
+      return Error(e.message);
+    }
+  }
+
+  static Future<Result> getSearchArticle(String q) async {
+    try {
+      Uri url = Uri.https(baseUrl, articleEndPoint, {
+        "apiKey": apiKey,
+        "q": q,
+      });
+      http.Response response = await http.get(url);
+
+      var json = jsonDecode(response.body);
+      ArticleResponse articleResponse = ArticleResponse.fromJson(json);
+      if (articleResponse.status == "error") {
+        return ServerError(articleResponse.message!);
+      } else {
+        return Success(articleResponse.articles);
+      }
+    } on SocketException catch (e) {
+      return Error(e.message);
     }
   }
 }

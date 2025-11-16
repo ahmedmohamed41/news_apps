@@ -5,6 +5,28 @@ import 'package:news_app/core/resources/colors_manager.dart';
 
 abstract class ThemeManager {
   static final ThemeData light = ThemeData(
+    inputDecorationTheme: InputDecorationThemeData(
+      prefixIconColor: ColorsManager.black,
+      suffixIconColor: ColorsManager.black,
+      labelStyle: GoogleFonts.inter(
+        color: ColorsManager.black,
+        fontSize: 20.sp,
+        fontWeight: FontWeight.w500,
+      ),
+      hintStyle: GoogleFonts.inter(
+        color: ColorsManager.black,
+        fontSize: 20.sp,
+        fontWeight: FontWeight.w500,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: ColorsManager.black),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: ColorsManager.black),
+      ),
+    ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: ColorsManager.white,
       foregroundColor: ColorsManager.black,
@@ -56,9 +78,42 @@ abstract class ThemeManager {
         fontWeight: FontWeight.w500,
         color: ColorsManager.white,
       ),
+      labelSmall: GoogleFonts.inter(
+        fontSize: 12.sp,
+        fontWeight: FontWeight.w400,
+        color: ColorsManager.black,
+      ),
+      bodyLarge: GoogleFonts.inter(
+        fontSize: 20.sp,
+        fontWeight: FontWeight.bold,
+        color: ColorsManager.black,
+      ),
     ),
   );
   static final ThemeData dark = ThemeData(
+    inputDecorationTheme: InputDecorationThemeData(
+      prefixIconColor: ColorsManager.white,
+      suffixIconColor: ColorsManager.white,
+      labelStyle: GoogleFonts.inter(
+        color: ColorsManager.white,
+        fontSize: 20.sp,
+        fontWeight: FontWeight.w500,
+      ),
+      hintStyle: GoogleFonts.inter(
+        color: ColorsManager.white,
+        fontSize: 20.sp,
+        fontWeight: FontWeight.w500,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: ColorsManager.white),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: ColorsManager.white),
+      ),
+    ),
+
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: ColorsManager.black,
       foregroundColor: ColorsManager.white,
@@ -108,6 +163,16 @@ abstract class ThemeManager {
       bodySmall: GoogleFonts.inter(
         fontSize: 14.sp,
         fontWeight: FontWeight.w500,
+        color: ColorsManager.white,
+      ),
+      labelSmall: GoogleFonts.inter(
+        fontSize: 12.sp,
+        fontWeight: FontWeight.w400,
+        color: ColorsManager.white,
+      ),
+      bodyLarge: GoogleFonts.inter(
+        fontSize: 20.sp,
+        fontWeight: FontWeight.bold,
         color: ColorsManager.white,
       ),
     ),

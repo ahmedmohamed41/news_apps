@@ -1,13 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:news_app/api/models/article_response/article.dart';
 import 'package:news_app/core/resources/colors_manager.dart';
 import 'package:news_app/features/home/sources_view/article_item.dart';
-import 'package:news_app/features/home/sources_view/article_provider.dart';
-import 'package:news_app/features/home/sources_view/source_provider.dart';
+import 'package:news_app/features/home/sources_view/article_view_model.dart';
+import 'package:news_app/features/home/sources_view/source_view_model.dart';
 import 'package:news_app/models/category_model.dart';
 import 'package:news_app/provider/config_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SourcesView extends StatefulWidget {
   const SourcesView({super.key, required this.category});
@@ -18,8 +21,8 @@ class SourcesView extends StatefulWidget {
 }
 
 class _SourcesViewState extends State<SourcesView> {
-  late SourceProvider sourceProvider;
-  late ArticleProvider articleProvider;
+  late SourceViewModel sourceViewModel;
+  late ArticleViewModel articleViewModel;
 
   @override
   void initState() {
@@ -29,11 +32,11 @@ class _SourcesViewState extends State<SourcesView> {
   }
 
   void fetchData() async {
-    sourceProvider = SourceProvider();
-    articleProvider = ArticleProvider();
-    await sourceProvider.fetchSources(widget.category);
-    if (sourceProvider.sources.isNotEmpty) {
-      articleProvider.fetchArticles(sourceProvider.sources[0]);
+    sourceViewModel = SourceViewModel();
+    articleViewModel = ArticleViewModel();
+    await sourceViewModel.fetchSources(widget.category);
+    if (sourceViewModel.sources.isNotEmpty) {
+      articleViewModel.fetchArticles(sourceViewModel.sources[0]);
     }
   }
 
@@ -45,16 +48,17 @@ class _SourcesViewState extends State<SourcesView> {
       child: MultiProvider(
         providers: [
           ChangeNotifierProvider.value(
-            value: sourceProvider,
+            value: sourceViewModel,
           ),
           ChangeNotifierProvider.value(
-            value: articleProvider,
+            value: articleViewModel,
           ),
         ],
         child: Column(
+          spacing: 20,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Consumer<SourceProvider>(
+            Consumer<SourceViewModel>(
               builder: (context, sourceProvider, child) {
                 if (sourceProvider.isLoading) {
                   return Center(
@@ -74,7 +78,7 @@ class _SourcesViewState extends State<SourcesView> {
                     labelStyle: Theme.of(context).textTheme.bodyMedium,
                     isScrollable: true,
                     onTap: (index) {
-                      articleProvider.fetchArticles(
+                      articleViewModel.fetchArticles(
                         sourceProvider.sources[index],
                       );
                     },
@@ -89,8 +93,7 @@ class _SourcesViewState extends State<SourcesView> {
                 );
               },
             ),
-
-            Consumer<ArticleProvider>(
+            Consumer<ArticleViewModel>(
               builder: (context, articleProvider, child) {
                 if (articleProvider.isLoading) {
                   return Expanded(
@@ -108,8 +111,16 @@ class _SourcesViewState extends State<SourcesView> {
                 }
                 return Expanded(
                   child: ListView.separated(
-                    itemBuilder: (context, index) => ArticleItem(
-                      article: articleProvider.articles[index],
+                    itemBuilder: (context, index) => InkWell(
+                      onTap: () {
+                        showBottomSheet(
+                          context,
+                          articleProvider.articles[index],
+                        );
+                      },
+                      child: ArticleItem(
+                        article: articleProvider.articles[index],
+                      ),
                     ),
                     separatorBuilder: (context, index) => SizedBox(
                       height: 15.h,
@@ -124,4 +135,70 @@ class _SourcesViewState extends State<SourcesView> {
       ),
     );
   }
+
+  void showBottomSheet(BuildContext context, Articles article) {
+    showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadiusGeometry.circular(8),
+      ),
+      backgroundColor: Colors.transparent,
+      context: context,
+      builder: (context) => AspectRatio(
+        aspectRatio: 1,
+        child: Padding(
+          padding: REdgeInsets.only(left: 8, right: 8, bottom: 30),
+          child: Container(
+            decoration: BoxDecoration(
+              color: ColorsManager.white,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: REdgeInsets.all(8),
+            child: Column(
+              spacing: 8,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: ClipRRect(
+                    borderRadius: BorderRadiusGeometry.circular(8),
+                    child: CachedNetworkImage(
+                      fit: BoxFit.fill,
+                      imageUrl: article.urlToImage ?? '',
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                    ),
+                  ),
+                ),
+                Text(
+                  article.title ?? '',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall!.copyWith(color: ColorsManager.black),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: REdgeInsets.symmetric(horizontal: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadiusGeometry.circular(12),
+                    ),
+                    backgroundColor: ColorsManager.black,
+                  ),
+                  onPressed: () {
+                    launchUrl(Uri.parse(article.url ?? ''));
+                  },
+                  child: Text(
+                    'View Full Articel',
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: ColorsManager.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
 }

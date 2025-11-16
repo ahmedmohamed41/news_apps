@@ -16,5 +16,7 @@
     "light":"Light",
     "languages":"Languages",
     "english":"English",
-    "arabic":"Arabic"
+    "arabic":"Arabic",
+    "search":"Search",
+    "no_search":"No Search News yet!"
 }

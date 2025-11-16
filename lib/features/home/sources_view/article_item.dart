@@ -3,19 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:news_app/api/models/article_response/article.dart';
 import 'package:news_app/core/resources/colors_manager.dart';
+import 'package:news_app/provider/config_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ArticleItem extends StatelessWidget {
   const ArticleItem({super.key, required this.article});
   final Articles article;
   @override
   Widget build(BuildContext context) {
+    final configProvider = Provider.of<ConfigProvider>(context);
     return Container(
       padding: REdgeInsets.all(8),
       decoration: BoxDecoration(
         borderRadius: BorderRadiusGeometry.circular(16.r),
         border: Border.all(
           width: 1,
-          color: ColorsManager.white,
+          color: configProvider.isDark
+              ? ColorsManager.white
+              : ColorsManager.black,
         ),
       ),
       child: Column(
@@ -40,13 +46,16 @@ class ArticleItem extends StatelessWidget {
           ),
           Row(
             children: [
-              Text(
-                'By:${article.author}',
-                style: Theme.of(context).textTheme.titleSmall,
+              Expanded(
+                child: Text(
+                  'By:${article.author ?? ''}',
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
               ),
               const Spacer(),
               Text(
-                article.publishedAt!.substring(article.publishedAt!.length-6),
+                timeago.format(DateTime.parse(article.publishedAt ?? '')),
                 style: Theme.of(context).textTheme.titleSmall,
               ),
             ],
@@ -55,4 +64,9 @@ class ArticleItem extends StatelessWidget {
       ),
     );
   }
+
+  // String timeAgoFromString(String timeString) {
+  //   final dateTime = DateTime.parse(timeString);
+  //   return timeago.format(dateTime);
+  // }
 }

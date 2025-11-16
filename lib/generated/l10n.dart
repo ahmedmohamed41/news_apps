@@ -158,6 +158,21 @@ class S {
   String get arabic {
     return Intl.message('Arabic', name: 'arabic', desc: '', args: []);
   }
+
+  /// `Search`
+  String get search {
+    return Intl.message('Search', name: 'search', desc: '', args: []);
+  }
+
+  /// `No Search News yet!`
+  String get no_search {
+    return Intl.message(
+      'No Search News yet!',
+      name: 'no_search',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
