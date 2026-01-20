@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:news_app/api/models/article_response/article.dart';
+import 'package:news_app/data/api/models/article_response/article.dart';
 import 'package:news_app/core/resources/colors_manager.dart';
 import 'package:news_app/provider/config_provider.dart';
 import 'package:provider/provider.dart';

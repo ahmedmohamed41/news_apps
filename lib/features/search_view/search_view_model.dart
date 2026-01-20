@@ -1,9 +1,11 @@
 import 'package:flutter/widgets.dart';
-import 'package:news_app/api/api_service.dart';
-import 'package:news_app/api/models/article_response/article.dart';
-import 'package:news_app/api/result.dart';
+import 'package:news_app/data/api/models/article_response/article.dart';
+import 'package:news_app/data/api/result.dart';
+import 'package:news_app/data/repository_impl/sources_repository_impl.dart';
 
 class SearchViewModel extends ChangeNotifier {
+  SourcesRepositoryImpl sourcesRepositoryImpl;
+  SearchViewModel({required this.sourcesRepositoryImpl});
   List<Articles> articles = [];
   bool isLoading = false;
   String? errorMessage;
@@ -16,7 +18,7 @@ class SearchViewModel extends ChangeNotifier {
     }
     isLoading = true;
     notifyListeners();
-    Result result = await ApiService.getSearchArticle(q);
+    Result result = await sourcesRepositoryImpl.getSearchArticle(q);
     switch (result) {
       case Success():
         {

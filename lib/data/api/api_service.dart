@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:news_app/api/models/article_response/article_response.dart';
-import 'package:news_app/api/models/source_responses/source.dart';
-import 'package:news_app/api/models/source_responses/source_response.dart';
-import 'package:news_app/api/result.dart';
+import 'package:news_app/data/api/models/article_response/article.dart';
+import 'package:news_app/data/api/models/article_response/article_response.dart';
+import 'package:news_app/data/api/models/source_responses/source.dart';
+import 'package:news_app/data/api/models/source_responses/source_response.dart';
+import 'package:news_app/data/api/result.dart';
 import 'package:news_app/models/category_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,7 +14,7 @@ class ApiService {
   static const String sourceEndPoint = '/v2/top-headlines/sources';
   static const String articleEndPoint = '/v2/everything';
 
-  static Future<Result> getSources(CategoryModel category) async {
+  Future<Result<List<Source>?>> getSources(CategoryModel category) async {
     try {
       Uri url = Uri.https(baseUrl, sourceEndPoint, {
         "apiKey": apiKey,
@@ -34,9 +35,7 @@ class ApiService {
     }
   }
 
-  static Future<Result> getArticle(
-    Source source,
-  ) async {
+  Future<Result<List<Articles>?>> getArticle(Source source) async {
     try {
       Uri url = Uri.https(baseUrl, articleEndPoint, {
         "apiKey": apiKey,
@@ -56,7 +55,7 @@ class ApiService {
     }
   }
 
-  static Future<Result> getSearchArticle(String q) async {
+  Future<Result<List<Articles>?>> getSearchArticle(String q) async {
     try {
       Uri url = Uri.https(baseUrl, articleEndPoint, {
         "apiKey": apiKey,

@@ -2,8 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:news_app/api/models/article_response/article.dart';
+import 'package:news_app/data/api/api_service.dart';
+import 'package:news_app/data/api/models/article_response/article.dart';
 import 'package:news_app/core/resources/colors_manager.dart';
+import 'package:news_app/data/data_sources_impl/sources_api_data_sources.dart';
+import 'package:news_app/data/repository_impl/sources_repository_impl.dart';
 import 'package:news_app/features/home/sources_view/article_item.dart';
 import 'package:news_app/features/search_view/search_view_model.dart';
 import 'package:news_app/generated/l10n.dart';
@@ -24,7 +27,11 @@ class _SearchViewState extends State<SearchView> {
   Widget build(BuildContext context) {
     final providerConfig = Provider.of<ConfigProvider>(context);
     return ChangeNotifierProvider(
-      create: (context) => SearchViewModel(),
+      create: (context) => SearchViewModel(
+        sourcesRepositoryImpl: SourcesRepositoryImpl(
+          sourcesDataSources: SourcesApiDataSources(apiService: ApiService()),
+        ),
+      ),
       child: Scaffold(
         body: SafeArea(
           child: Padding(

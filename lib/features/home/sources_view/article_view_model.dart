@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
-import 'package:news_app/api/api_service.dart';
-import 'package:news_app/api/models/article_response/article.dart';
-import 'package:news_app/api/models/source_responses/source.dart';
-import 'package:news_app/api/result.dart';
+import 'package:news_app/data/api/models/article_response/article.dart';
+import 'package:news_app/data/api/models/source_responses/source.dart';
+import 'package:news_app/data/api/result.dart';
+import 'package:news_app/data/repository_impl/article_repository_impl.dart';
 
 class ArticleViewModel extends ChangeNotifier {
+  ArticleRepositoryImpl articleRepositoryImpl;
+  ArticleViewModel({required this.articleRepositoryImpl});
   List<Articles> articles = [];
   bool isLoading = false;
   String? errorMessage;
@@ -13,7 +15,7 @@ class ArticleViewModel extends ChangeNotifier {
   ) async {
     isLoading = true;
     notifyListeners();
-    Result result = await ApiService.getArticle(source);
+    Result result = await articleRepositoryImpl.getArticle(source);
 
     switch (result) {
       case Success():

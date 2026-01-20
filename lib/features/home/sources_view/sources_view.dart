@@ -2,8 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:news_app/api/models/article_response/article.dart';
+import 'package:news_app/data/api/api_service.dart';
+import 'package:news_app/data/api/models/article_response/article.dart';
 import 'package:news_app/core/resources/colors_manager.dart';
+import 'package:news_app/data/data_sources_impl/article_api_data_sources.dart';
+import 'package:news_app/data/data_sources_impl/sources_api_data_sources.dart';
+import 'package:news_app/data/repository_impl/article_repository_impl.dart';
+import 'package:news_app/data/repository_impl/sources_repository_impl.dart';
 import 'package:news_app/features/home/sources_view/article_item.dart';
 import 'package:news_app/features/home/sources_view/article_view_model.dart';
 import 'package:news_app/features/home/sources_view/source_view_model.dart';
@@ -32,8 +37,16 @@ class _SourcesViewState extends State<SourcesView> {
   }
 
   void fetchData() async {
-    sourceViewModel = SourceViewModel();
-    articleViewModel = ArticleViewModel();
+    sourceViewModel = SourceViewModel(
+      sourcesRepositoryImpl: SourcesRepositoryImpl(
+        sourcesDataSources: SourcesApiDataSources(apiService: ApiService()),
+      ),
+    );
+    articleViewModel = ArticleViewModel(
+      articleRepositoryImpl: ArticleRepositoryImpl(
+        articleDataSources: ArticleApiDataSources(apiService: ApiService()),
+      ),
+    );
     await sourceViewModel.fetchSources(widget.category);
     if (sourceViewModel.sources.isNotEmpty) {
       articleViewModel.fetchArticles(sourceViewModel.sources[0]);
@@ -190,7 +203,9 @@ class _SourcesViewState extends State<SourcesView> {
                   },
                   child: Text(
                     'View Full Articel',
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: ColorsManager.white),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: ColorsManager.white,
+                    ),
                   ),
                 ),
               ],

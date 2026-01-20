@@ -1,17 +1,19 @@
 import 'package:flutter/cupertino.dart';
-import 'package:news_app/api/api_service.dart';
-import 'package:news_app/api/models/source_responses/source.dart';
-import 'package:news_app/api/result.dart';
+import 'package:news_app/data/api/models/source_responses/source.dart';
+import 'package:news_app/data/api/result.dart';
+import 'package:news_app/data/repository_impl/sources_repository_impl.dart';
 import 'package:news_app/models/category_model.dart';
 
 class SourceViewModel extends ChangeNotifier {
+  SourcesRepositoryImpl sourcesRepositoryImpl;
+  SourceViewModel({required this.sourcesRepositoryImpl});
   List<Source> sources = [];
   bool isLoading = false;
   String? errorMessage;
   Future<void> fetchSources(CategoryModel category) async {
     isLoading = true;
     notifyListeners();
-    Result result = await ApiService.getSources(category);
+    Result result = await sourcesRepositoryImpl.getSources(category);
     switch (result) {
       case Success():
         {
